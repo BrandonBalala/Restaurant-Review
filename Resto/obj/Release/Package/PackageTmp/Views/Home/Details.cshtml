@@ -1,0 +1,158 @@
+﻿@model Resto.Models.Restaurant
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Restaurant</h4>
+    <hr />
+    @Html.ActionLink("Edit", "Edit", new { id = Model.RestoId }) |
+    @if (User.Identity.Name == "Admin")
+    {
+        @Html.ActionLink("Delete", "Delete", new { id = Model.RestoId })
+    }
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RestoName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RestoName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StreetNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StreetNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StreetName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StreetName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PostalCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PostalCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Genre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Genre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Views)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Views)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EditDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EditDate)
+        </dd>
+        <dt>
+            Average Rating
+        </dt>
+        <dd>
+            @{
+                double avgRating = 0.0;
+                int numEntries = 0;
+                String star;
+            
+            foreach(var item in Model.Comments)
+            {
+                star = item.Rating.ToString();
+                star = star.Trim();
+                numEntries++;
+                avgRating = star.Length + avgRating;    
+            }
+            
+           
+            if (numEntries == 0)
+            {
+                numEntries = 1;
+            }
+            avgRating = Math.Round(avgRating / numEntries, 1);
+            }
+            <p>
+                @avgRating
+            </p>
+             
+        </dd>
+    </dl>
+</div>
+
+<hr />
+<div>
+    <h1>Comments</h1>
+    @Html.ActionLink("Add Comment", "Create", "Comments", new { id = Model.RestoId}, null)
+    <table>
+        @foreach (var item in Model.Comments)
+        {
+
+            <tr>
+                <td>
+                    <h2>@item.Title</h2>
+                    <p>@item.UserName - @item.CreateDate</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "Comments", new { id = item.CommentId }, null) |
+                    @Html.ActionLink("Delete", "Delete", "Comments", new { id = item.CommentId }, null) 
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Rating: @item.Rating</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>@item.Review</p>
+                </td>
+            </tr>
+
+        }
+    </table>
+</div>
+<p>
+   
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,44 @@
+﻿@model Resto.Models.User
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+
+@if (TempData["RedirectReason"] == "Unauthorized")
+{
+    <h3>You don't have permission to access. Return to the @Html.ActionLink("Home", "Index", "Home") page, or try to login again</h3>
+}
+@if (User.Identity.IsAuthenticated)
+{
+    <h3>Are you not already log?</h3>
+    @Html.ActionLink("Back to Homepage", "Index", "Home")
+}
+else
+{
+    using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }))
+    {
+
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <br />
+        <table>
+            <tr>
+                <td>@Html.LabelFor(model => model.UserName)</td>
+                <td>@Html.EditorFor(model => model.UserName)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(model => model.Password)</td>
+                <td>@Html.EditorFor(model => model.Password)</td>
+            </tr>
+        </table>
+        <br />
+        <input type="submit" value="Login" />
+
+
+
+    }
+    
+}

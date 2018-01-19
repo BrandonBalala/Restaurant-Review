@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="RestoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Comment">
+    <Key>
+      <PropertyRef Name="CommentId" />
+    </Key>
+    <Property Name="CommentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RestoId" Type="int" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="CreateDate" Type="date" Nullable="false" />
+    <Property Name="Rating" Type="char" MaxLength="5" Nullable="false" />
+    <Property Name="Review" Type="nvarchar" MaxLength="140" />
+  </EntityType>
+  <EntityType Name="Restaurant">
+    <Key>
+      <PropertyRef Name="RestoId" />
+    </Key>
+    <Property Name="RestoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RestoName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="StreetNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="StreetName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="PostalCode" Type="nvarchar" MaxLength="6" Nullable="false" />
+    <Property Name="Location" Type="geography" />
+    <Property Name="Genre" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Price" Type="char" MaxLength="5" Nullable="false" />
+    <Property Name="CreateDate" Type="date" Nullable="false" />
+    <Property Name="EnteredBy" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="Views" Type="int" Nullable="false" />
+    <Property Name="EditDate" Type="date" Nullable="false" />
+    <Property Name="EditBy" Type="nvarchar" MaxLength="15" Nullable="false" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="UserName" />
+    </Key>
+    <Property Name="UserName" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="12" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserDetail">
+    <Key>
+      <PropertyRef Name="UserName" />
+    </Key>
+    <Property Name="UserName" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="25" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="25" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="City" Type="nvarchar" MaxLength="25" Nullable="false" />
+    <Property Name="Country" Type="nvarchar" MaxLength="25" Nullable="false" />
+    <Property Name="ImgPath" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="comment_restoId_fk">
+    <End Role="Restaurant" Type="Self.Restaurant" Multiplicity="1" />
+    <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Restaurant">
+        <PropertyRef Name="RestoId" />
+      </Principal>
+      <Dependent Role="Comment">
+        <PropertyRef Name="RestoId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="comment_username_fk">
+    <End Role="UserDetail" Type="Self.UserDetail" Multiplicity="1" />
+    <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserDetail">
+        <PropertyRef Name="UserName" />
+      </Principal>
+      <Dependent Role="Comment">
+        <PropertyRef Name="UserName" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="restaurant_editby_fk">
+    <End Role="UserDetail" Type="Self.UserDetail" Multiplicity="1" />
+    <End Role="Restaurant" Type="Self.Restaurant" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserDetail">
+        <PropertyRef Name="UserName" />
+      </Principal>
+      <Dependent Role="Restaurant">
+        <PropertyRef Name="EditBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="restaurant_enteredby_fk">
+    <End Role="UserDetail" Type="Self.UserDetail" Multiplicity="1" />
+    <End Role="Restaurant" Type="Self.Restaurant" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserDetail">
+        <PropertyRef Name="UserName" />
+      </Principal>
+      <Dependent Role="Restaurant">
+        <PropertyRef Name="EnteredBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="userdetail_username_fk">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="UserDetail" Type="Self.UserDetail" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserName" />
+      </Principal>
+      <Dependent Role="UserDetail">
+        <PropertyRef Name="UserName" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="RestoModelStoreContainer">
+    <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Restaurant" EntityType="Self.Restaurant" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserDetail" EntityType="Self.UserDetail" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="comment_restoId_fk" Association="Self.comment_restoId_fk">
+      <End Role="Restaurant" EntitySet="Restaurant" />
+      <End Role="Comment" EntitySet="Comment" />
+    </AssociationSet>
+    <AssociationSet Name="comment_username_fk" Association="Self.comment_username_fk">
+      <End Role="UserDetail" EntitySet="UserDetail" />
+      <End Role="Comment" EntitySet="Comment" />
+    </AssociationSet>
+    <AssociationSet Name="restaurant_editby_fk" Association="Self.restaurant_editby_fk">
+      <End Role="UserDetail" EntitySet="UserDetail" />
+      <End Role="Restaurant" EntitySet="Restaurant" />
+    </AssociationSet>
+    <AssociationSet Name="restaurant_enteredby_fk" Association="Self.restaurant_enteredby_fk">
+      <End Role="UserDetail" EntitySet="UserDetail" />
+      <End Role="Restaurant" EntitySet="Restaurant" />
+    </AssociationSet>
+    <AssociationSet Name="userdetail_username_fk" Association="Self.userdetail_username_fk">
+      <End Role="User" EntitySet="User" />
+      <End Role="UserDetail" EntitySet="UserDetail" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
